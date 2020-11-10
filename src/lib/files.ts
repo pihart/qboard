@@ -126,14 +126,14 @@ export default class FileHandler {
     );
   };
 
-  private handleImage = async (file: File, cursor): Promise<fabric.Object[]> =>
-    new Promise<fabric.Object[]>((resolve) =>
-      AsyncReader.readAsDataURL(file).then((result) =>
-        fabric.Image.fromURL(result.toString(), (obj: fabric.Image) => {
-          resolve(this.pages.canvas.placeObject(obj, cursor));
-        })
-      )
-    );
+  private handleImage = async (
+    file: File,
+    cursor
+  ): Promise<fabric.Object[]> => {
+    const elt = document.createElement("img");
+    elt.src = (await AsyncReader.readAsDataURL(file)).toString();
+    return this.pages.canvas.placeObject(new fabric.Image(elt), cursor);
+  };
 
   private handleJSON = async (file: File): Promise<number> => {
     const pages = await JSONReader.read(AsyncReader.readAsText(file));
