@@ -2,6 +2,7 @@ import { fabric } from "fabric";
 
 import { HistoryCommand } from "./history";
 import Pages, { PageJSON } from "./pages";
+import { Cursor } from "./page";
 
 export class AsyncReader {
   static readAsText = (file: File): Promise<string | ArrayBuffer> =>
@@ -64,7 +65,7 @@ export class JSONWriter {
   toBlob = (): Blob =>
     new Blob([this.toString()], { type: "application/json" });
 
-  toURL = (): [url: string, revoke: () => void] => {
+  toURL = (): [string, () => void] => {
     const url = window.URL.createObjectURL(this.toBlob());
     const revoke = () => window.URL.revokeObjectURL(url);
     return [url, revoke];
@@ -79,7 +80,10 @@ export type FileHandlerResponse = {
 export default class FileHandler {
   constructor(public pages: Pages) {}
 
-  processFiles = async (files: FileList, cursor?): Promise<HistoryCommand> => {
+  processFiles = async (
+    files: FileList,
+    cursor?: Cursor
+  ): Promise<HistoryCommand> => {
     const images = [];
     await Promise.all(
       [...files].map(async (file) => {
@@ -98,7 +102,7 @@ export default class FileHandler {
 
   acceptFile = async (
     files: FileList,
-    cursor?
+    cursor?: Cursor
   ): Promise<FileHandlerResponse> => {
     if (!files.length) return { action: "none" };
     const [file] = files;
@@ -117,6 +121,9 @@ export default class FileHandler {
         history: { clear: [true] },
       };
     }
+
+    // unsupported file
+    return { action: "none" };
   };
 
   openFile = async (file: File): Promise<boolean> => {
@@ -128,7 +135,7 @@ export default class FileHandler {
 
   private handleImage = async (
     file: File,
-    cursor
+    cursor?: Cursor
   ): Promise<fabric.Object[]> => {
     const elt = document.createElement("img");
     elt.src = (await AsyncReader.readAsDataURL(file)).toString();
