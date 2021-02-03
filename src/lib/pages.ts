@@ -51,7 +51,7 @@ export default class Pages {
    * @param saveExisting
    * Whether to save the contents on the current page to memory before switching pages.
    * Forces an unconditional re-render when set to `false`.
-   * May need to set to `false` if directly manipulating the internal array.
+   * May need to set to `false` if directly manipulating the internal array to prevent an override.
    * @return The index of the loaded page.
    * This equals {@param index}.
    */
