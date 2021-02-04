@@ -1,4 +1,5 @@
 import { fabric } from "fabric";
+import { Assert, IsSubType } from "@mehra/ts";
 
 import { HistoryCommand } from "./history";
 import Pages, { PageJSON } from "./pages";
@@ -26,27 +27,53 @@ export class AsyncReader {
     });
 }
 
+/**
+ * Common to _all_ versions of exports
+ */
+interface QboardFile {
+  "qboard-version": number;
+  pages: PageJSON[];
+}
+
+const isValidQboardFile = (object: unknown): object is QboardFile => {
+  if (object instanceof Object) {
+    return "qboard-version" in object;
+  }
+  return false;
+};
+
+/**
+ * The current qboard file format
+ */
+interface CurrentQboardFile {
+  "qboard-version": 1;
+  pages: PageJSON[];
+}
+
+/**
+ * @test Ensure that {@link CurrentQboardFile} is a subtype of {@link QboardFile}
+ */
+{
+  // Inline test because ts doesn't let an interface implement another interface
+  // Technically outputs to JS but it gets optimized out by both the minifier and the optimizing compiler
+  const _test_compatible_file_fmt: IsSubType<
+    CurrentQboardFile,
+    QboardFile
+  > = true;
+}
+
 // manages version compatibility with old document formats
 // change the signature and usages to accommodate new data; this will fill in sample data for missing fields
 export class JSONReader {
   static async read(json: Promise<string | ArrayBuffer>): Promise<PageJSON[]> {
-    const object = JSON.parse((await json).toString());
-
-    const { "qboard-version": version, pages } = object;
-    switch (version) {
-      case 1:
-        return pages;
-      default:
-        return pages;
-    }
+    const object: unknown = JSON.parse((await json).toString());
+    Assert(isValidQboardFile(object));
+    return object.pages;
   }
 }
 
 export class JSONWriter {
-  private readonly sourceJSON: {
-    "qboard-version": number;
-    pages: PageJSON[];
-  };
+  private readonly sourceJSON: CurrentQboardFile;
   private stringified: string;
 
   constructor(pagesJSON: PageJSON[]) {
