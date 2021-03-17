@@ -186,18 +186,19 @@ export default class QBoard {
 
     this.activeTool.deactivate();
 
-    if (tool.isBrush() || tool.requiresBase()) {
+    if (tool.requiresBase()) {
       this.baseCanvas.activateSelection();
       this.canvasElement.parentElement.style.display = "none";
-
-      if (tool.isBrush())
-        await tool.setBrush(
-          this.baseCanvas.freeDrawingBrush as fabric.BaseBrush,
-          this.drawerOptions
-        );
     } else {
       this.baseCanvas.deactivateSelection();
       this.canvasElement.parentElement.style.display = "block";
+    }
+
+    if (tool.isBrush()) {
+      await tool.setBrush(
+        this.baseCanvas.freeDrawingBrush as fabric.BaseBrush,
+        this.drawerOptions
+      );
     }
 
     this.activeTool = tool;
