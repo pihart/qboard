@@ -70,7 +70,15 @@ export default class Page extends fabric.Canvas {
       // and https://github.com/cjquines/qboard/issues/176
       // for more details.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this as any)._toObject(obj, "toObject", ["strokeUniform"])
+      (this as any)._toObject(obj, "toObject", [
+        "strokeUniform",
+        "selectable",
+        "lockMovementX",
+        "lockMovementY",
+        "lockScalingX",
+        "lockScalingY",
+        "lockRotation",
+      ])
     );
   };
 

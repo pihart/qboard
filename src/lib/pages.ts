@@ -43,6 +43,12 @@ export default class Pages {
     this.pagesJSON[this.currentIndex] = this.canvas.toObject([
       "id",
       "strokeUniform",
+      "selectable",
+      "lockMovementX",
+      "lockMovementY",
+      "lockScalingX",
+      "lockScalingY",
+      "lockRotation",
     ]);
   };
 
