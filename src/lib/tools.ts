@@ -163,7 +163,7 @@ export class Eraser extends Brush {
   pathCreated = ({ path }: PathEvent): void => {
     const objects = this.baseCanvas
       .getObjects()
-      .filter((object) => object.intersectsWithObject(path));
+      .filter((object) => object !== path && object.intersectsWithObject(path));
     this.baseCanvas.remove(path, ...objects);
     this.history.remove(objects);
   };
