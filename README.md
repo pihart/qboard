@@ -85,9 +85,9 @@ If we have released a new file version beyond version 1, just opening any old fi
 
 ## Implementation details
 
-It's build on the [nwb](https://github.com/insin/nwb) toolkit, which handles React, Webpack, and Babel.
+It's built with [Vite](https://vitejs.dev/), which handles React and bundling.
 We're using Typescript.
-The main app is mostly powered through [Fabric.js](http://fabricjs.com/), with [KeyboardJS](https://github.com/RobertWHurst/KeyboardJS) handling keybindings, and [pdfmake](http://pdfmake.org/#/) handling exporting to PDF.
+The main app is mostly powered through [Fabric.js](http://fabricjs.com/), with [KeyboardJS](https://github.com/RobertWHurst/KeyboardJS) handling keybindings, [pdfmake](http://pdfmake.org/#/) handling exporting to PDF, and [MathJax](https://www.mathjax.org/) rendering LaTeX.
 
 We extend the Fabric canvas to a [Page class](src/lib/page.ts) with some convenience functions.
 The [Pages class](src/lib/pages.ts) stores pages in a JSON array;
@@ -124,11 +124,4 @@ build the image with `docker build -t qboard .`, then run with `docker run -d --
 **Note that this server is not suitable for production use;
 just host the static files instead.**
 
-The FabricJS file is huge and it doesn't support tree shaking, so the [qboard demo at cjquines.com] uses a [custom build](http://fabricjs.com/build/).
-It includes gestures, animation, free drawing, interaction, serialization, fabric.Rect, fabric.Ellipse, fabric.Image, fabric.Line, and window.fabric, which I think is the absolute minimum needed for it to work.
-(Do note that custom build currently [has issues](https://github.com/fabricjs/fabric.js/issues/6624), though.
-If you encounter errors, you may wish to try [this demo][qboard demo at pihart.github.io], which uses the full build.)
-
 [cjquines.com]: https://cjquines.com/
-[qboard demo at cjquines.com]: https://cjquines.com/qboard/
-[qboard demo at pihart.github.io]: https://pihart.github.io/qboard
