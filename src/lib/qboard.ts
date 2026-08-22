@@ -90,6 +90,7 @@ export default class QBoard {
       backgroundColor: "white",
       renderOnAddRemove: false,
       selection: false,
+      perPixelTargetFind: true,
       targetFindTolerance: 15,
     });
     this.baseCanvas.freeDrawingBrush = new fabric.PencilBrush(this.baseCanvas);

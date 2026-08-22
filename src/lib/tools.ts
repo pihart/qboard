@@ -41,6 +41,38 @@ class Behaviors {
       oy + y - (vx * side) / sq,
     ];
   };
+
+  static samplePath = (path: fabric.Path, step: number): fabric.Point[] => {
+    const anchors = path.path.flatMap((command) => {
+      switch (command[0]) {
+        case "M":
+        case "L":
+          return [new fabric.Point(command[1], command[2])];
+        case "Q":
+          return [
+            new fabric.Point(command[1], command[2]),
+            new fabric.Point(command[3], command[4]),
+          ];
+        case "C":
+          return [
+            new fabric.Point(command[1], command[2]),
+            new fabric.Point(command[3], command[4]),
+            new fabric.Point(command[5], command[6]),
+          ];
+        default:
+          return [];
+      }
+    });
+
+    return anchors.flatMap((point, i) => {
+      if (i === 0) return [point];
+      const previous = anchors[i - 1];
+      const steps = Math.ceil(previous.distanceFrom(point) / step);
+      return Array.from({ length: steps }, (_, j) =>
+        previous.lerp(point, (j + 1) / steps),
+      );
+    });
+  };
 }
 
 export class Tool {
@@ -161,11 +193,40 @@ export class Pen extends Brush {
 
 export class Eraser extends Brush {
   pathCreated = ({ path }: PathEvent): void => {
+    AssertType<fabric.Path>(path);
     const objects = this.baseCanvas
       .getObjects()
-      .filter((object) => object !== path && object.intersectsWithObject(path));
+      .filter(
+        (object) =>
+          object !== path &&
+          object.intersectsWithObject(path) &&
+          this.shouldErase(path, object),
+      );
     this.baseCanvas.remove(path, ...objects);
     this.history.remove(objects);
+  };
+
+  private shouldErase = (
+    path: fabric.Path,
+    object: fabric.FabricObject,
+  ): boolean => {
+    const margin =
+      this.baseCanvas.targetFindTolerance / this.baseCanvas.getZoom();
+    const { left, top, width, height } = object.getBoundingRect();
+    const viewportTransform = this.baseCanvas.viewportTransform;
+
+    return Behaviors.samplePath(path, margin).some((point) => {
+      if (
+        point.x < left - margin ||
+        point.x > left + width + margin ||
+        point.y < top - margin ||
+        point.y > top + height + margin
+      )
+        return false;
+
+      const { x, y } = point.transform(viewportTransform);
+      return !this.baseCanvas.isTargetTransparent(object, x, y);
+    });
   };
 
   setBrush = (
@@ -228,10 +289,7 @@ export class Line extends DrawingTool {
     this.x = x;
     this.y = y;
 
-    return new fabric.Line([x, y, x2 ?? x, y2 ?? y], {
-      ...options,
-      perPixelTargetFind: true,
-    });
+    return new fabric.Line([x, y, x2 ?? x, y2 ?? y], options);
   };
 
   resize = (
