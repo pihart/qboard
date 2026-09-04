@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import keyboardJS from "keyboardjs";
 
 import QBoard, { QBoardState } from "../lib/qboard";
 import { Dash, Fill, Stroke } from "../lib/styles";
@@ -20,7 +19,7 @@ export const enum Visibility {
 }
 
 const Overlay = ({ qboard }: { qboard: QBoard }) => {
-  const [visibility, setVisibility] = useState<Visibility>(Visibility.Full);
+  const visibility = Visibility.Full;
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   // const [isMobile, setMobility] = useState(false);
   const isMobile = true;
@@ -69,12 +68,7 @@ const Overlay = ({ qboard }: { qboard: QBoard }) => {
     qboard.callback = setState;
     qboard.globalState.toggleHelpModal = toggleOpen;
     qboard.updateState();
-
-    keyboardJS.bind("tab", () => {
-      setVisibility((currentVisibility) => (currentVisibility + 2) % 3);
-    });
   }, []);
-
   return (
     <>
       <VirtualFileInput
@@ -125,6 +119,8 @@ const Overlay = ({ qboard }: { qboard: QBoard }) => {
       <ContextMenu
         currentStyle={state.currentStyle}
         doAction={qboard.action.doAction}
+        getMovementLockState={qboard.getMovementLockState}
+        toggleMovementLock={qboard.toggleMovementLock}
       />
     </>
   );
