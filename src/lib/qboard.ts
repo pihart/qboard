@@ -10,6 +10,12 @@ import ClipboardHandler from "./clipboard";
 import StyleHandler, { Dash, Fill, Stroke, Style } from "./styles";
 import ActionHandler from "./action";
 import KeyboardHandler, { KeyMap } from "./keyboard";
+import {
+  getMovementLockState,
+  MovementAxis,
+  MovementLockState,
+  toggleMovementLock,
+} from "./movement-lock";
 import { HTMLChildElement } from "../types/html";
 import {
   FabricIEvent,
@@ -196,6 +202,21 @@ export default class QBoard {
       canRedo: this.history.redoStack.length > 0,
       keyMap: this.keyboard.keyMap,
     });
+  };
+
+  getMovementLockState = (): MovementLockState =>
+    getMovementLockState(this.baseCanvas.getActiveObjects());
+
+  toggleMovementLock = (axis: MovementAxis): void => {
+    const objects = this.baseCanvas.getActiveObjects();
+    if (!objects.length) return;
+
+    this.history.store(objects);
+    toggleMovementLock(objects, axis);
+    this.history.modify(objects);
+    this.history.store(objects);
+    this.baseCanvas.requestRenderAll();
+    this.updateState();
   };
 
   /**

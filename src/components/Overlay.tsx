@@ -119,6 +119,8 @@ const Overlay = ({ qboard }: { qboard: QBoard }) => {
       <ContextMenu
         currentStyle={state.currentStyle}
         doAction={qboard.action.doAction}
+        getMovementLockState={qboard.getMovementLockState}
+        toggleMovementLock={qboard.toggleMovementLock}
       />
     </>
   );

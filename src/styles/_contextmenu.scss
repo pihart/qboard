@@ -20,6 +20,26 @@
     opacity: 1;
   }
 
+  .movement-locks {
+    display: inline-flex;
+
+    button {
+      align-items: center;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 1.7em 1.4em;
+      margin: 0;
+      padding: 0;
+      width: 3.4em;
+    }
+
+    button.active {
+      background-color: #aaa8;
+      border-bottom: 0;
+      border-radius: 0.25em;
+    }
+  }
+
   .__react_component_tooltip {
     display: none;
   }
