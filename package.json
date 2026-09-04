@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "predeploy": "npm run build",
     "deploy": "node deploy.js",
-    "start": "vite"
+    "start": "vite",
+    "verify:keyboard-routing": "node scripts/verify-keyboard-routing.mjs"
   },
   "dependencies": {
     "@mathjax/src": "^4.0.0",

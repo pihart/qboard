@@ -1,30 +1,10 @@
 import keyboardJS from "keyboardjs";
 
 import { Action } from "./action";
+import { routeShortcut } from "./keyboard-routing";
 
 export type KeyMap = {
   [key: string]: Action;
-};
-
-const modifierNames = {
-  alt: "altKey",
-  command: "metaKey",
-  ctrl: "ctrlKey",
-  shift: "shiftKey",
-} as const;
-
-const isEditable = (target: EventTarget | null): boolean =>
-  target instanceof HTMLInputElement ||
-  target instanceof HTMLTextAreaElement ||
-  target instanceof HTMLSelectElement ||
-  (target instanceof HTMLElement && target.isContentEditable);
-
-const matchesModifiers = (key: string, event: keyboardJS.KeyEvent): boolean => {
-  const modifiers = new Set(key.split(" + "));
-
-  return Object.entries(modifierNames).every(
-    ([name, property]) => modifiers.has(name) === event[property],
-  );
 };
 
 export const defaultKeys: KeyMap = {
@@ -147,12 +127,7 @@ export default class KeyboardHandler {
   bind = (key: string, action: Action, save = true): void => {
     this.keyMap[key] = action;
     keyboardJS.bind(key, (event) => {
-      if (!event || isEditable(event.target) || !matchesModifiers(key, event)) {
-        return;
-      }
-
-      this.doAction(action);
-      event.preventDefault();
+      if (event) routeShortcut(key, event, () => this.doAction(action));
     });
     this.updateState();
 
