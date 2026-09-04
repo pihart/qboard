@@ -43,6 +43,7 @@ describe("readPDF", () => {
       type: "application/pdf",
     });
     const canvases: HTMLCanvasElement[] = [];
+    const renderedPages: number[] = [];
     const pages = await readPDF(file, 1600, 900, {
       loadDocument: async (data) => {
         const task = getLegacyDocument({ data });
@@ -58,7 +59,9 @@ describe("readPDF", () => {
         canvases.push(canvas);
         return canvas;
       },
-      renderPage: async () => undefined,
+      renderPage: async (page) => {
+        renderedPages.push(page.pageNumber);
+      },
       serializeImage: (canvas, left, top, scale) =>
         ({
           type: "Image",
@@ -71,6 +74,7 @@ describe("readPDF", () => {
     });
 
     expect(pages).toHaveLength(3);
+    expect(renderedPages).toEqual([1, 2, 3]);
     expect(pages.map(({ objects }) => objects[0])).toMatchObject([
       { fixturePage: 1, left: 800, top: 450, scaleX: 0.5, scaleY: 0.5 },
       { fixturePage: 2, left: 800, top: 450, scaleX: 0.5, scaleY: 0.5 },

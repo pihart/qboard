@@ -98,7 +98,7 @@ export const readPDF = async (
             canvas,
             boardWidth / 2,
             boardHeight / 2,
-            displayScale / (displayScale * rasterScale),
+            1 / rasterScale,
           ),
         ],
         background: "white",
