@@ -1,6 +1,7 @@
 import keyboardJS from "keyboardjs";
 
 import { Action } from "./action";
+import { routeShortcut } from "./keyboard-routing";
 
 export type KeyMap = {
   [key: string]: Action;
@@ -125,7 +126,9 @@ export default class KeyboardHandler {
    */
   bind = (key: string, action: Action, save = true): void => {
     this.keyMap[key] = action;
-    keyboardJS.bind(key, () => this.doAction(this.keyMap[key]));
+    keyboardJS.bind(key, (event) => {
+      if (event) routeShortcut(key, event, () => this.doAction(action));
+    });
     this.updateState();
 
     if (save) this.save();
