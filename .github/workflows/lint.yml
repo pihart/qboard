@@ -29,3 +29,6 @@ jobs:
 
       - name: Run movement-lock tests
         run: npm test
+
+      - name: Verify keyboard routing
+        run: npm run verify:keyboard-routing
