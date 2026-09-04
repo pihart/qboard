@@ -22,7 +22,7 @@ try {
       import assert from "node:assert/strict";
       import { JSONReader, JSONWriter } from ${JSON.stringify(filesModule)};
 
-      const pages = [];
+      const pages = [{ version: "6.7.1", objects: [], background: "white" }];
       const exportedDate = new Date("2026-09-04T12:34:56.789Z");
       const saved = JSON.parse(new JSONWriter(pages, exportedDate).toString());
 
@@ -36,6 +36,7 @@ try {
       for (const version of [1, 2, 3]) {
         assert.deepEqual(JSONReader.readParsed({ "qboard-version": version, pages }), pages);
       }
+      assert.throws(() => JSONReader.readParsed([{}]));
       assert.deepEqual(
         JSONReader.readParsed({ "qboard-version": 3, pages, "future-field": true }),
         pages,

@@ -60,6 +60,18 @@ const isJSONFile = (file: File): file is JSONFile =>
 const isImageFile = (file: File): file is ImageFile =>
   file.type.startsWith("image/");
 
+const isValidPageJSON = (page: unknown): page is PageJSON =>
+  page instanceof Object &&
+  "version" in page &&
+  typeof page.version === "string" &&
+  "objects" in page &&
+  Array.isArray(page.objects) &&
+  "background" in page &&
+  typeof page.background === "string";
+
+const isValidPagesJSON = (pages: unknown): pages is PageJSON[] =>
+  Array.isArray(pages) && pages.every(isValidPageJSON);
+
 /**
  * Common to object-based export versions (1 and later)
  */
@@ -96,7 +108,7 @@ const isValidQboardFile = (object: unknown): object is QboardFile => {
     Number.isSafeInteger(version) &&
     version >= 1 &&
     "pages" in object &&
-    Array.isArray(object.pages)
+    isValidPagesJSON(object.pages)
   );
 };
 
@@ -150,7 +162,7 @@ export class JSONReader {
    */
   static readParsed(object: unknown): PageJSON[] {
     // Version 0 predates the qboard-version wrapper and is just the page array.
-    if (Array.isArray(object)) return object as PageJSON[];
+    if (isValidPagesJSON(object)) return object;
 
     if (!isValidQboardFile(object)) throw new InvalidQboardFileException();
 
