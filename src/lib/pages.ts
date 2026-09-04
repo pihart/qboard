@@ -1,6 +1,8 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import * as fabric from "fabric";
 
+import { interactionProperties } from "../types/fabric";
+
 import Page from "./page";
 import { JSONWriter } from "./files";
 
@@ -44,6 +46,7 @@ export default class Pages {
       "strokeUniform",
       "id",
       "idVersion",
+      ...interactionProperties,
     ]);
   };
 

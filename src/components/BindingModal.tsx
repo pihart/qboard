@@ -25,7 +25,11 @@ const BindingModal = (props: {
     overlayClassName="modal-overlay binding-modal"
     isOpen={props.letter !== ""}
   >
-    <button className="close" onClick={() => props.close()}>
+    <button
+      aria-label="Close binding editor"
+      className="close"
+      onClick={() => props.close()}
+    >
       {Icon.close}
     </button>
     <p>

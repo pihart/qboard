@@ -23,7 +23,11 @@ const HelpModal = (props: {
     overlayClassName="modal-overlay help-modal"
     isOpen={props.isOpen}
   >
-    <button className="close" onClick={() => props.toggleOpen()}>
+    <button
+      aria-label="Close help"
+      className="close"
+      onClick={() => props.toggleOpen()}
+    >
       {Icon.close}
     </button>
     <p>

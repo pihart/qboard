@@ -36,8 +36,9 @@ button {
     cursor: unset;
   }
 
-  &:focus {
-    outline: none;
+  &:focus-visible {
+    outline: 2px solid #4a91c2;
+    outline-offset: 2px;
   }
 }
 

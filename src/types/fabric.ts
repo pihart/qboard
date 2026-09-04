@@ -9,6 +9,19 @@ export type GuaranteedIObjectOptions = Partial<fabric.FabricObjectProps> & {
   strokeUniform: boolean;
 };
 
+/**
+ * Interaction properties that Fabric does not include in its default JSON
+ * serialization. Keep these when copying, saving, or restoring objects.
+ */
+export const interactionProperties = [
+  "selectable",
+  "lockMovementX",
+  "lockMovementY",
+  "lockScalingX",
+  "lockScalingY",
+  "lockRotation",
+] as const;
+
 export interface ObjectId extends fabric.FabricObject {
   id?: number;
   idVersion?: 1;
