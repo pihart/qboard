@@ -22,12 +22,15 @@
 
   .movement-locks {
     display: inline-flex;
-    gap: 0.1em;
-    margin-left: 0.35em;
 
     button {
+      align-items: center;
       cursor: pointer;
-      width: auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1.7em);
+      margin: 0;
+      padding: 0;
+      width: 3.4em;
     }
 
     button.active {
