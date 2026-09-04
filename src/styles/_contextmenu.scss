@@ -20,6 +20,17 @@
     opacity: 1;
   }
 
+  .movement-locks {
+    border-left: 1px solid #aaa;
+    display: inline-flex;
+    margin-left: 0.25em;
+    padding-left: 0.25em;
+
+    button {
+      width: auto;
+    }
+  }
+
   .__react_component_tooltip {
     display: none;
   }
