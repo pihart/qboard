@@ -73,6 +73,14 @@ interface QboardFile {
   // so we include it for convenience.
   // However, it's not necessarily true that this field will remain the same forever.
   pages: PageJSON[];
+
+  /**
+   * The ISO 8601 date-time at which the file was exported, when available.
+   *
+   * Optional so that exports produced before this metadata was added remain
+   * valid.
+   */
+  "exported-date"?: string;
 }
 
 /**
@@ -95,6 +103,7 @@ const isValidQboardFile = (object: unknown): object is QboardFile => {
 interface CurrentQboardFile {
   "qboard-version": 2;
   pages: PageJSON[];
+  "exported-date": string;
 }
 
 /**
@@ -154,10 +163,11 @@ export class JSONWriter {
   private asBlob?: Blob;
   private asUrl?: string;
 
-  constructor(pagesJSON: PageJSON[]) {
+  constructor(pagesJSON: PageJSON[], exportedDate = new Date()) {
     this.sourceJSON = {
       "qboard-version": 2,
       pages: pagesJSON,
+      "exported-date": exportedDate.toISOString(),
     };
   }
 
