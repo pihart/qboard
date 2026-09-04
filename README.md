@@ -114,6 +114,7 @@ Everything else is delegated to handlers, which are in individual files:
 
 ### Development
 
+Development requires Node.js 24 or newer and npm 11 or newer. Run the automated test suite with `npm test`.
 Running `npm start` will start a development server, which watches source files for changes.
 Run `npm run build` to generate the static application files, suitable for hosting or offline use.
 We have linters;
