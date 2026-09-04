@@ -27,12 +27,14 @@ try {
       const saved = JSON.parse(new JSONWriter(pages, exportedDate).toString());
 
       assert.deepEqual(saved, {
-        "qboard-version": 2,
+        "qboard-version": 3,
         pages,
         "exported-date": "2026-09-04T12:34:56.789Z",
       });
       assert.deepEqual(JSONReader.readParsed(saved), pages);
-      assert.deepEqual(JSONReader.readParsed({ "qboard-version": 1, pages }), pages);
+      for (const version of [0, 1, 2, 3]) {
+        assert.deepEqual(JSONReader.readParsed({ "qboard-version": version, pages }), pages);
+      }
       assert.deepEqual(
         JSONReader.readParsed({ "qboard-version": 3, pages, "future-field": true }),
         pages,

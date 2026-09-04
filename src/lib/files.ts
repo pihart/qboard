@@ -91,17 +91,20 @@ interface QboardFile {
  * all valid qboard files will pass (return `true`) but not all invalid qboard files will fail (return `false`)
  */
 const isValidQboardFile = (object: unknown): object is QboardFile => {
-  if (object instanceof Object) {
-    return "qboard-version" in object;
-  }
-  return false;
+  if (!(object instanceof Object) || !("qboard-version" in object))
+    return false;
+
+  const version = object["qboard-version"];
+  return (
+    typeof version === "number" && Number.isSafeInteger(version) && version >= 0
+  );
 };
 
 /**
  * The current qboard file format
  */
 interface CurrentQboardFile {
-  "qboard-version": 2;
+  "qboard-version": 3;
   pages: PageJSON[];
   "exported-date": string;
 }
@@ -165,7 +168,7 @@ export class JSONWriter {
 
   constructor(pagesJSON: PageJSON[], exportedDate = new Date()) {
     this.sourceJSON = {
-      "qboard-version": 2,
+      "qboard-version": 3,
       pages: pagesJSON,
       "exported-date": exportedDate.toISOString(),
     };
