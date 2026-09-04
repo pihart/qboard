@@ -30,7 +30,7 @@ Other neat things you can do:
 - Hit the export button to save to a PDF.
   The save button exports to a JSON file, which you can later load back in to qboard.
 - Use your browser's paste function (usually Ctrl+V or Cmd+V on Mac) to paste images from the system clipboard.
-  You can also drag images onto the board, or use the file picker on the left side of the screen (labeled `Open`).
+  You can also drag images or PDFs onto the board, or use the file picker on the left side of the screen (labeled `Open`). Each PDF page is imported as a new whiteboard page.
 - Open your saved JSON files with the file picker to replace your current board with one from a file.
   Alternatively, drag and drop your saved JSON files;
   instead of overwriting your current board, this will insert the contents of the files into the board after the current page!
