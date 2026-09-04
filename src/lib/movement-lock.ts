@@ -4,9 +4,7 @@ export type MovementLockable = {
   lockMovementX: boolean;
   lockMovementY: boolean;
   set: (
-    options: Partial<
-      Pick<MovementLockable, "lockMovementX" | "lockMovementY">
-    >,
+    options: Partial<Pick<MovementLockable, "lockMovementX" | "lockMovementY">>,
   ) => unknown;
 };
 
@@ -16,9 +14,7 @@ export type MovementLockState = {
   y: boolean;
 };
 
-const propertyFor = (
-  axis: MovementAxis,
-): "lockMovementX" | "lockMovementY" =>
+const propertyFor = (axis: MovementAxis): "lockMovementX" | "lockMovementY" =>
   axis === "x" ? "lockMovementX" : "lockMovementY";
 
 export const getMovementLockState = (
