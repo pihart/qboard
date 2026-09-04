@@ -70,18 +70,9 @@ Although initially designed for giving lectures, the whiteboard controls are pre
 
 > My saved file won't open. Help!
 
-There was a short period of time when we used a different file format for our JSON files.
-It's very unlikely that you have such a file.
-In case you do, you can make it compatible with the modern qboard app by taking the file and wrapping the contents like so:
-
-```json
-{
-  "qboard-version": 1,
-  "pages": OLD_FILE_CONTENTS_GO_HERE
-}
-```
-
-If we have released a new file version beyond version 1, just opening any old files and saving them again will update them to the latest version.
+qboard can read every historical file format: version 0's bare page array,
+and version 1 and later's object with `qboard-version` and `pages` fields.
+Saving an older file writes it in the latest format.
 
 ## Implementation details
 
