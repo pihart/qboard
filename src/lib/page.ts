@@ -1,6 +1,10 @@
 import * as fabric from "fabric";
 import AssertType from "../types/assert";
-import { isFabricCollection, ObjectId } from "../types/fabric";
+import {
+  interactionProperties,
+  isFabricCollection,
+  ObjectId,
+} from "../types/fabric";
 
 export type Cursor = { x: number; y: number };
 
@@ -75,7 +79,11 @@ export default class Page extends fabric.Canvas {
         // and https://github.com/cjquines/qboard/issues/176
         // for more details.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (this as any)._toObject(obj, "toObject", ["data", "strokeUniform"]),
+        (this as any)._toObject(obj, "toObject", [
+          "data",
+          "strokeUniform",
+          ...interactionProperties,
+        ]),
       )
       .map((obj) => {
         delete obj.id;
